@@ -14,11 +14,13 @@ verbose = False
 def parseArgs(argv):
 
     global targetURL, targetMode, targetFilterDomain, targetFilterExtension, verbose
+    
     try:
         opts, args = getopt.getopt(argv,"", ["url=", "mode=", "filter-domain=", "filter-extension=", "verbose"])
     except getopt.GetoptError:
         print("link-checker.py --url=\"<URL>\" --mode=<HEAD|GET> --filter-domain=<DOMAIN> --filter-extension=\"<jpg,png>\"")
         sys.exit(1)
+    
     for opt, arg in opts:
         if opt == '--help':
             print("link-checker.py --url=\"<URL>\" --mode=<HEAD|GET> --filter-domain=\"<DOMAIN>\" --filter-extension=\"<jpg,png>\"")
@@ -33,6 +35,10 @@ def parseArgs(argv):
             targetFilterExtension = arg.split(",")
         elif opt == "--verbose":
             verbose = True
+
+    if len(targetURL)<1:
+        print("link-checker.py --url=\"<URL>\" --mode=<HEAD|GET> --filter-domain=<DOMAIN> --filter-extension=\"<jpg,png>\"")
+        sys.exit(1)
     
     print("### LINK-CHECKER ###")
     print("URL: ", targetURL)
@@ -69,9 +75,9 @@ def begin():
 
     # Domain filter ?
     if len(targetFilterDomain) > 0:
-        pattern = re.compile(rf"((https?):\/\/({re.escape(targetFilterDomain)})([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\s\'\"]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(rf"(https?:\/\/{re.escape(targetFilterDomain)}.*?)[\'|\"|\s]", re.MULTILINE|re.UNICODE)
     else:
-        pattern = re.compile(r"((https?):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\s\'\"]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(r"(https?:\/\/.*?)[\'|\"|\s]", re.MULTILINE|re.UNICODE)
 
     # Build match list
     matchList = set()
