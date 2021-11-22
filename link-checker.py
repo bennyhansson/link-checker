@@ -50,9 +50,18 @@ def parseArgs(argv):
 
 def checkURL(in_url):
     if targetMode == "GET":
-        response = requests.get(in_url)
+        try:
+            response = requests.get(in_url, timeout=10)
+        except:
+            print("Result: NOK - " + in_url + " STATUS: Connection error")
+            return in_url
     else:
-        response = requests.head(in_url)
+        try:
+            response = requests.head(in_url, timeout=10)
+        except:
+            print("Result: NOK - " + in_url + " STATUS: Connection error")
+            return in_url
+    
     if response.status_code == 200:
         print("Result: OK - " + in_url)
     else:
@@ -75,9 +84,9 @@ def begin():
 
     # Domain filter ?
     if len(targetFilterDomain) > 0:
-        pattern = re.compile(rf"(https?:\/\/{re.escape(targetFilterDomain)}.*?)[\'|\"|\s]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(rf"((https?):\/\/({re.escape(targetFilterDomain)})([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\'|\"|<|\s]", re.MULTILINE|re.UNICODE)
     else:
-        pattern = re.compile(r"(https?:\/\/.*?)[\'|\"|\s]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(r"((https?):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\'|\"|<|\s]", re.MULTILINE|re.UNICODE)
 
     # Build match list
     matchList = set()
