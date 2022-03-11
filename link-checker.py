@@ -84,9 +84,9 @@ def begin():
 
     # Domain filter ?
     if len(targetFilterDomain) > 0:
-        pattern = re.compile(rf"((https?):\/\/({re.escape(targetFilterDomain)})([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\'|\"|<|\s]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(rf"((https?):\/\/({re.escape(targetFilterDomain)})([\w.,@?^=%&():\/~+#-]*[\w@?^=%&()\/~+#-]))[\'|\"|<]", re.MULTILINE|re.UNICODE)
     else:
-        pattern = re.compile(r"((https?):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]))[\'|\"|<|\s]", re.MULTILINE|re.UNICODE)
+        pattern = re.compile(r"((https?):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&():\/~+#-]*[\w@?^=%&()\/~+#-]))[\'|\"|<]", re.MULTILINE|re.UNICODE)
 
     # Build match list
     matchList = set()
